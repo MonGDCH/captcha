@@ -1,0 +1,30 @@
+{
+    "name": "mongdch/mon-captcha",
+    "description": "The PHP Captcha Library",
+    "version": "1.0.0",
+    "keywords": [
+        "PHP",
+        "mon",
+        "captcha"
+    ],
+    "homepage": "http://blog.gdmon.com/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MonGDCH",
+            "email": "985558837@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "mon\\captcha\\": "src"
+        },
+        "files": [
+
+        ]
+    }
+}
