@@ -124,7 +124,7 @@ class Captcha
 
         // 设置字体
         if (empty($this->font)) {
-            $this->font = ($this->useZh) ? __DIR__ . '/ttf/zh.ttf' :  __DIR__ . '/ttf/en.ttf';
+            $this->font = ($this->useZh) ? __DIR__ . '/ttf/zh.ttf' : __DIR__ . '/ttf/en.ttf';
         }
 
         // 绘制杂点
@@ -182,7 +182,7 @@ class Captcha
     public function getCode($id = '')
     {
         $key = $this->encode($this->seKey) . $id;
-        return  $_SESSION[$key];
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
 
     /**

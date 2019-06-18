@@ -11,6 +11,7 @@ session_start();
  */
 function create($id = '')
 {
+    // $captcha = new \mon\captcha\Captcha(['useZh' => true]); // 中文验证码
     $captcha = new \mon\captcha\Captcha();
     return $captcha->create($id);
 }
@@ -27,9 +28,12 @@ function check($code, $id = '')
     return $captcha->check($code, $id);
 }
 
+// create();
 
 // 获取验证码
-$code = new \mon\captcha\Captcha())->getCode();
+$code = (new \mon\captcha\Captcha())->getCode();
+
+var_dump($code);
 
 // 验证验证码
-var_dump(check($code));
+var_dump(check($code['verify_code']));
