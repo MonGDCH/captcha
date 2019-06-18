@@ -170,7 +170,7 @@ class Captcha
         $content = ob_get_clean();
         imagedestroy($this->_img);
 
-        return $this->response($content);
+        return $this->response($content, $id);
     }
 
     /**
@@ -320,9 +320,10 @@ class Captcha
      * 响应图片结果集
      *
      * @param [type] $content 图片内容
+     * @param [type] $id      验证码标识
      * @return void
      */
-    private function response($content)
+    private function response($content, $id)
     {
         // 判断是否存在FApi/Response对象
         if (class_exists('\\FApi\\Response')) {
@@ -331,6 +332,7 @@ class Captcha
             // 直接输出图片
             header("Content-type: image/png");
             echo $content;
+            return $this->getCode($id);
         }
     }
 }

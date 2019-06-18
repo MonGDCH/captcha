@@ -28,12 +28,12 @@ function check($code, $id = '')
     return $captcha->check($code, $id);
 }
 
-// create();
+$code = create();
+file_put_contents('t.log', var_export($code, true));
 
 // 获取验证码
-$code = (new \mon\captcha\Captcha())->getCode();
-
-var_dump($code);
+// $code = (new \mon\captcha\Captcha())->getCode();
+// var_dump($code);
 
 // 验证验证码
-var_dump(check($code['verify_code']));
+// var_dump(check($code['verify_code']));
