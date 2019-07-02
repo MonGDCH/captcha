@@ -1,4 +1,5 @@
 <?php
+
 namespace mon\captcha;
 
 /**
@@ -161,8 +162,13 @@ class Captcha
         $secode['verify_code'] = $code;
         $secode['verify_time'] = time();
 
-        // 保存到SESSION中
-        $_SESSION[$key] = $secode;
+        // 保存到SESSION中, 兼容mon\store\Session
+        if (class_exists('\\mon\\store\\Session')) {
+            (new \mon\store\Session())->set($key, $secode);
+        } else {
+            $_SESSION[$key] = $secode;
+        }
+
 
         // 获取输出图像
         ob_start();
@@ -182,7 +188,12 @@ class Captcha
     public function getCode($id = '')
     {
         $key = $this->encode($this->seKey) . $id;
-        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+
+        if (class_exists('\\mon\\store\\Session')) {
+            return (new \mon\store\Session())->get($key, null);
+        } else {
+            return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+        }
     }
 
     /**
@@ -194,7 +205,11 @@ class Captcha
     public function delCode($id = '')
     {
         $key = $this->encode($this->seKey) . $id;
-        unset($_SESSION[$key]);
+        if (class_exists('\\mon\\store\\Session')) {
+            return (new \mon\store\Session())->del($key);
+        } else {
+            unset($_SESSION[$key]);
+        }
     }
 
     /**
@@ -274,7 +289,7 @@ class Captcha
         for ($px = $px1; $px <= $px2; $px = $px + 1) {
             if (0 != $w) {
                 $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2; // y = Asin(ωx+φ) + b
-                $i  = (int)($this->fontSize / 5);
+                $i  = (int) ($this->fontSize / 5);
                 while ($i > 0) {
                     imagesetpixel($this->_img, $px + $i, $py + $i, $this->_color); // 这里(while)循环画像素点比imagettftext和imagestring用字体大小一次画出（不用这while循环）性能要好很多
                     $i--;
@@ -294,7 +309,7 @@ class Captcha
         for ($px = $px1; $px <= $px2; $px = $px + 1) {
             if (0 != $w) {
                 $py = $A * sin($w * $px + $f) + $b + $this->imageH / 2; // y = Asin(ωx+φ) + b
-                $i  = (int)($this->fontSize / 5);
+                $i  = (int) ($this->fontSize / 5);
                 while ($i > 0) {
                     imagesetpixel($this->_img, $px + $i, $py + $i, $this->_color);
                     $i--;
