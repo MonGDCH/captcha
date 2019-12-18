@@ -7,6 +7,7 @@ namespace mon\captcha;
  * 
  * @author Mon <985558837@qq.com>
  * @version 1.1.0
+ * @version 1.0.1 定制化LAF框架支持
  */
 class Captcha
 {
@@ -163,15 +164,15 @@ class Captcha
                 // 数字运算验证码
                 $num1 = $this->numSet[mt_rand(0, strlen($this->numSet) - 1)] * $this->numSet[mt_rand(0, strlen($this->numSet) - 1)];
                 $num2 = $this->numSet[mt_rand(0, strlen($this->numSet) - 1)] * $this->numSet[mt_rand(0, strlen($this->numSet) - 1)];
-                if($num1 > $num2){
+                if ($num1 > $num2) {
                     $code = [$num1 - $num2];
                     $expression = $num1 . '-' . $num2 . '=';
-                }else{
+                } else {
                     $code = [$num1 + $num2];
                     $expression = $num1 . '+' . $num2 . '=';
                 }
                 imagettftext($this->_img, $this->fontSize * 1.5, 0, $this->fontSize * 1, $this->fontSize + mt_rand(15, 30), $this->_color, $this->font, $expression);
-            break;
+                break;
             default:
                 // 默认混合数字英文验证码
                 $codeSet = $this->numSet . $this->enSet;
@@ -191,8 +192,8 @@ class Captcha
         $secode['verify_time'] = time();
 
         // 保存到SESSION中, 兼容mon\store\Session
-        if (class_exists('\\mon\\store\\Session')) {
-            (new \mon\store\Session())->set($key, $secode);
+        if (class_exists('\\Laf\\provider\\Session')) {
+            (new \Laf\provider\Session())->set($key, $secode);
         } else {
             $_SESSION[$key] = $secode;
         }
@@ -215,8 +216,8 @@ class Captcha
     public function getCode($id = '')
     {
         $key = $this->encode($this->seKey) . $id;
-        if (class_exists('\\mon\\store\\Session')) {
-            return (new \mon\store\Session())->get($key, null);
+        if (class_exists('\\Laf\\provider\\Session')) {
+            return (new \Laf\provider\Session())->get($key, null);
         } else {
             return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
         }
@@ -231,8 +232,8 @@ class Captcha
     public function delCode($id = '')
     {
         $key = $this->encode($this->seKey) . $id;
-        if (class_exists('\\mon\\store\\Session')) {
-            return (new \mon\store\Session())->del($key);
+        if (class_exists('\\Laf\\provider\\Session')) {
+            return (new \Laf\provider\Session())->del($key);
         } else {
             unset($_SESSION[$key]);
         }
@@ -287,14 +288,14 @@ class Captcha
     /**
      * 绘制验证码干扰线
      * 
-     *      画一条由两条连在一起构成的随机正弦函数曲线作干扰线(你可以改成更帅的曲线函数)
-     *      高中的数学公式咋都忘了涅，写出来
-     *        正弦型函数解析式：y=Asin(ωx+φ)+b
-     *      各常数值对函数图像的影响：
-     *        A：决定峰值（即纵向拉伸压缩的倍数）
-     *        b：表示波形在Y轴的位置关系或纵向移动距离（上加下减）
-     *        φ：决定波形与X轴位置关系或横向移动距离（左加右减）
-     *        ω：决定周期（最小正周期T=2π/∣ω∣）
+     * 画一条由两条连在一起构成的随机正弦函数曲线作干扰线(你可以改成更帅的曲线函数)
+     * 高中的数学公式咋都忘了涅，写出来
+     *  正弦型函数解析式：y=Asin(ωx+φ)+b
+     * 各常数值对函数图像的影响：
+     *  A：决定峰值（即纵向拉伸压缩的倍数）
+     *  b：表示波形在Y轴的位置关系或纵向移动距离（上加下减）
+     *  φ：决定波形与X轴位置关系或横向移动距离（左加右减）
+     *  ω：决定周期（最小正周期T=2π/∣ω∣）
      *
      * @return void
      */
