@@ -3,11 +3,12 @@
 namespace mon\captcha;
 
 /**
- * 验证码类
+ * 验证码
  * 
  * @author Mon <985558837@qq.com>
  * @version 1.1.0
- * @version 1.0.1 定制化LAF框架支持
+ * @version 1.1.1 定制化LAF框架支持
+ * @version 1.2.0 优化定制支持实现，支持任意框架
  */
 class Captcha
 {
@@ -18,9 +19,9 @@ class Captcha
      */
     protected $config = [
         // 验证码类型
-        'type'      => 'num',
+        'type'      => '',
         // 验证码加密密钥
-        'seKey'     => 'mon_captcha',
+        'seKey'     => 'mon-captcha',
         // 数字验证码字符串
         'numSet'    => '23456789',
         // 验证码字符集合
@@ -47,21 +48,23 @@ class Captcha
         'reset'     => true,
         // 使用的字体
         'font'      => '',
+        // 存储驱动实例，需实现get、set、del方法
+        'store'     => null,
     ];
 
     /**
      * 验证码图片实例
      *
-     * @var [type]
+     * @var resource
      */
-    private $_img = null;
+    protected $_img;
 
     /**
      * 验证码字体颜色
      *
-     * @var [type]
+     * @var string
      */
-    private $_color = null;
+    protected $_color;
 
     /**
      * 构造方法
@@ -110,12 +113,13 @@ class Captcha
     }
 
     /**
-     * 创建图片验证码，并将验证码存储到session中
+     * 创建图片验证码
      *
-     * @param string $id    验证码ID
-     * @return void
+     * @param string $id 验证码ID
+     * @param boolean $output 是否输出验证码图像
+     * @return mixed
      */
-    public function create($id = '')
+    public function create($id = '', $output = true)
     {
         // 图片宽(px)
         $this->imageW || $this->imageW = $this->length * $this->fontSize * 1.5 + $this->length * $this->fontSize / 2;
@@ -142,7 +146,7 @@ class Captcha
         }
 
         // 绘制验证码
-        $code   = []; // 验证码
+        $code = []; // 验证码
         $codeNX = 0; // 验证码第N个字符的左边距
         switch ($this->type) {
             case 'zh':
@@ -161,6 +165,14 @@ class Captcha
                 }
                 break;
             case 'num':
+                // 数字验证码
+                for ($i = 0; $i < $this->length; $i++) {
+                    $code[$i] = $this->numSet[mt_rand(0, strlen($this->numSet) - 1)];
+                    $codeNX += mt_rand($this->fontSize * 1.2, $this->fontSize * 1.6);
+                    imagettftext($this->_img, $this->fontSize, mt_rand(-40, 40), $codeNX, $this->fontSize * 1.6, $this->_color, $this->font, $code[$i]);
+                }
+                break;
+            case 'calcul':
                 // 数字运算验证码
                 $num1 = $this->numSet[mt_rand(0, strlen($this->numSet) - 1)] * $this->numSet[mt_rand(0, strlen($this->numSet) - 1)];
                 $num2 = $this->numSet[mt_rand(0, strlen($this->numSet) - 1)] * $this->numSet[mt_rand(0, strlen($this->numSet) - 1)];
@@ -191,9 +203,9 @@ class Captcha
         $secode['verify_code'] = $code;
         $secode['verify_time'] = time();
 
-        // 保存到SESSION中, 兼容mon\store\Session
-        if (class_exists('\\Laf\\provider\\Session')) {
-            (new \Laf\provider\Session())->set($key, $secode);
+        // 判断是否存在store驱动
+        if ($this->store) {
+            $this->store->set($key, $secode);
         } else {
             $_SESSION[$key] = $secode;
         }
@@ -203,21 +215,26 @@ class Captcha
         imagepng($this->_img);
         $content = ob_get_clean();
         imagedestroy($this->_img);
+        // 输出图像
+        if ($output) {
+            header("Content-type: image/png");
+            echo $content;
+        }
 
-        return $this->response($content, $id);
+        return $content;
     }
 
     /**
      * 获取验证码
      *
      * @param string $id    验证码ID
-     * @return void
+     * @return mixed
      */
     public function getCode($id = '')
     {
         $key = $this->encode($this->seKey) . $id;
-        if (class_exists('\\Laf\\provider\\Session')) {
-            return (new \Laf\provider\Session())->get($key, null);
+        if ($this->store) {
+            return $this->store->get($key, null);
         } else {
             return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
         }
@@ -227,13 +244,13 @@ class Captcha
      * 删除验证码
      *
      * @param string $id    验证码ID
-     * @return void
+     * @return mixed
      */
     public function delCode($id = '')
     {
         $key = $this->encode($this->seKey) . $id;
-        if (class_exists('\\Laf\\provider\\Session')) {
-            return (new \Laf\provider\Session())->del($key);
+        if ($this->store) {
+            return $this->store->del($key);
         } else {
             unset($_SESSION[$key]);
         }
@@ -244,7 +261,7 @@ class Captcha
      *
      * @param string $code  验证码
      * @param string $id    验证码ID
-     * @return void
+     * @return boolean
      */
     public function check($code, $id = '')
     {
@@ -272,7 +289,7 @@ class Captcha
      *
      * @return void
      */
-    private function writeNoise()
+    protected function writeNoise()
     {
         $codeSet = '2345678abcdefhijkmnpqrstuvwxyz';
         for ($i = 0; $i < 10; $i++) {
@@ -299,7 +316,7 @@ class Captcha
      *
      * @return void
      */
-    private function writeCurve()
+    protected function writeCurve()
     {
         $px = $py = 0;
         // 曲线前部分
@@ -348,33 +365,13 @@ class Captcha
     /**
      * 加密验证码
      *
-     * @param [type] $str   验证码信息
-     * @return void
+     * @param string $str 验证码信息
+     * @return string
      */
-    private function encode($str)
+    protected function encode($str)
     {
         $key = substr(md5($this->seKey), 5, 8);
         $str = substr(md5($str), 8, 10);
         return md5($key . $str);
-    }
-
-    /**
-     * 响应图片结果集
-     *
-     * @param [type] $content 图片内容
-     * @param [type] $id      验证码标识
-     * @return void
-     */
-    private function response($content, $id)
-    {
-        // 判断是否存在FApi/Response对象
-        if (class_exists('\\FApi\\Response')) {
-            return \FApi\Response::create($content)->header(['Content-Type' => 'image/png', 'Content-Length' => strlen($content)]);
-        } else {
-            // 直接输出图片
-            header("Content-type: image/png");
-            echo $content;
-            return $this->getCode($id);
-        }
     }
 }

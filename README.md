@@ -16,6 +16,10 @@ composer require mongdch/mon-captcha
 
 #### 版本
 
+##### 1.2.0
+
+* 优化定制支持实现，支持任意框架
+
 ##### 1.1.1
 
 * 增强对LAF框架的支持

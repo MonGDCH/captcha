@@ -28,7 +28,7 @@ function check($code, $id = '')
     return $captcha->check($code, $id);
 }
 
-// $code = create();
+$code = create();
 // file_put_contents('t.log', var_export($code, true));
 
 // 获取验证码
@@ -36,4 +36,4 @@ function check($code, $id = '')
 // var_dump($code);
 
 // 验证验证码
-var_dump(check($_GET['verify_code']));
+// var_dump(check($_GET['verify_code']));
