@@ -55,7 +55,7 @@ class Captcha
     /**
      * 验证码图片实例
      *
-     * @var resource
+     * @var mixed
      */
     protected $_img;
 
@@ -105,7 +105,7 @@ class Captcha
      * 检查配置
      *
      * @param  string $name 配置名称
-     * @return bool
+     * @return boolean
      */
     public function __isset($name)
     {
