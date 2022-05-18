@@ -49,7 +49,7 @@ class Captcha
         // 使用的字体
         'font'      => '',
         // 存储驱动实例，需实现get、set、del方法
-        'store'     => null,
+        'store'     => '',
     ];
 
     /**
@@ -197,12 +197,11 @@ class Captcha
         }
 
         // 保存验证码
-        $key = $this->encode($this->seKey) . $id;
+        $key = $this->encode($this->seKey . $id);
         $code = strtoupper(implode('', $code));
         $secode = [];
         $secode['verify_code'] = $code;
         $secode['verify_time'] = time();
-
         // 判断是否存在store驱动
         if ($this->store) {
             $this->store->set($key, $secode);
@@ -232,7 +231,7 @@ class Captcha
      */
     public function getCode($id = '')
     {
-        $key = $this->encode($this->seKey) . $id;
+        $key = $this->encode($this->seKey . $id);
         if ($this->store) {
             return $this->store->get($key, null);
         } else {
@@ -248,7 +247,7 @@ class Captcha
      */
     public function delCode($id = '')
     {
-        $key = $this->encode($this->seKey) . $id;
+        $key = $this->encode($this->seKey . $id);
         if ($this->store) {
             return $this->store->del($key);
         } else {
