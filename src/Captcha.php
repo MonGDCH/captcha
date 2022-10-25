@@ -2,6 +2,8 @@
 
 namespace mon\captcha;
 
+use InvalidArgumentException;
+
 /**
  * 验证码
  * 
@@ -33,9 +35,9 @@ class Captcha
         // 验证码字 体大小(px)
         'fontSize'  => 25,
         // 是否画混淆曲线
-        'useCurve'  => true,
+        'useCurve'  => false,
         // 是否添加杂点
-        'useNoise'  => true,
+        'useNoise'  => false,
         // 验证码图片高度
         'imageH'    => 0,
         // 验证码图片宽度
@@ -48,7 +50,7 @@ class Captcha
         'reset'     => true,
         // 使用的字体
         'font'      => '',
-        // 存储驱动实例，需实现get、set、del方法
+        // 存储驱动实例，需实现get、set、delete方法或实现 CaptchaStore 接口
         'store'     => '',
     ];
 
@@ -73,7 +75,7 @@ class Captcha
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->config, $config);
+        $this->setConfig($config);
     }
 
     /**
@@ -110,6 +112,35 @@ class Captcha
     public function __isset($name)
     {
         return isset($this->config[$name]);
+    }
+
+    /**
+     * 设置配置信息
+     *
+     * @param array $config
+     * @return Captcha
+     */
+    public function setConfig(array $config)
+    {
+        $this->config = array_merge($this->config, $config);
+        return $this;
+    }
+
+    /**
+     * 存储驱动实例
+     *
+     * @param CaptchaStore $store 实现接口的存储实例
+     * @throws InvalidArgumentException
+     * @return Captcha
+     */
+    public function setStore($store)
+    {
+        if (!$store instanceof CaptchaStore) {
+            throw new InvalidArgumentException("Store need implement 'CaptchaStore'");
+        }
+
+        $this->store = $store;
+        return $this;
     }
 
     /**
@@ -249,7 +280,7 @@ class Captcha
     {
         $key = $this->encode($this->seKey . $id);
         if ($this->store) {
-            return $this->store->del($key);
+            return $this->store->delete($key);
         } else {
             unset($_SESSION[$key]);
         }

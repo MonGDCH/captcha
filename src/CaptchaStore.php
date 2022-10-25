@@ -4,6 +4,9 @@ namespace mon\captcha;
 
 /**
  * 自定义验证码数据存储接口
+ * 
+ * @author Mon <985558837@qq.com>
+ * @version 1.0.0
  */
 interface CaptchaStore
 {
@@ -31,5 +34,5 @@ interface CaptchaStore
      * @param string $key
      * @return mixed
      */
-    public function del($key);
+    public function delete($key);
 }

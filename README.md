@@ -17,6 +17,12 @@ composer require mongdch/mon-captcha
 
 #### 版本
 
+##### 1.2.3
+
+* 优化业务，增加`setConfig`、`setStore`方法
+* 更新依赖
+* 更新字体库
+
 ##### 1.2.2
 
 * 修正使用`__set`魔术方法设置`store`自定义存储引擎无效的BUG
