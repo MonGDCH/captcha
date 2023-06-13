@@ -1,39 +1,28 @@
 <?php
 
+use mon\captcha\Captcha;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
-/**
- * 创建验证码
- *
- * @return void
- */
-function create($id = '')
-{
-    // $captcha = new \mon\captcha\Captcha(['useZh' => true]); // 中文验证码
-    $captcha = new \mon\captcha\Captcha();
-    return $captcha->create($id);
-}
+// 所属应用
+$app = 'test';
+// 验证码id
+$id = '';
+// 是否直接输出
+$output = false;
 
-/**
- * 验证验证码
- *
- * @param [type] $code
- * @return void
- */
-function check($code, $id = '')
-{
-    $captcha = new \mon\captcha\Captcha();
-    return $captcha->check($code, $id);
-}
+// 创建验证码实例
+$captcha = new Captcha();
+// 生成验证码图片
+$img = $captcha->create($app, $id, $output);
+// var_dump($img);
 
-$code = create();
-// file_put_contents('t.log', var_export($code, true));
+// 获取验证码信息
+$codeInfo = $captcha->getCode($app, $id);
+var_dump($codeInfo);
 
-// 获取验证码
-// $code = (new \mon\captcha\Captcha())->getCode();
-// var_dump($code);
-
-// 验证验证码
-// var_dump(check($_GET['verify_code']));
+// 校验验证码
+$check = $captcha->check($codeInfo['code'], $app, $id);
+var_dump($check);

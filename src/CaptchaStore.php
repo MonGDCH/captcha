@@ -13,26 +13,29 @@ interface CaptchaStore
     /**
      * 获取存储数据
      *
-     * @param string $key
-     * @param mixed $default
+     * @param string $app 验证码所属应用
+     * @param string $id 验证码ID
+     * @param mixed $default 默认值
      * @return mixed
      */
-    public function get($key, $default = null);
+    public function get(string $app, string $id, $default = null);
 
     /**
      * 设置存储数据
      *
-     * @param string $key
-     * @param mixed $value
+     * @param string $app 验证码所属应用
+     * @param string $id 验证码ID
+     * @param mixed $value 值
      * @return mixed
      */
-    public function set($key, $value);
+    public function set(string $app, string $id, $value);
 
     /**
      * 删除存储数据
      *
-     * @param string $key
+     * @param string $app 验证码所属应用
+     * @param string $id 验证码ID
      * @return mixed
      */
-    public function delete($key);
+    public function delete(string $app, string $id);
 }
