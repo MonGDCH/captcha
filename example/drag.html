@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes" />
+    <title>drag-captcha</title>
+</head>
+
+<body>
+    <div class="box">
+        <button type="button" id="captcha">验证码</button>
+    </div>
+
+    <script src="./static/monCaptcha.js"></script>
+    <script>
+        new monCaptcha({
+            mode: 'modal',
+            element: '#captcha',
+            url: '?page=captcha',
+            onCheck(code, time, captcha) {
+                if (time > 10000) {
+                    captcha.showTips('验证码超过10秒已无效', false, () => {
+                        captcha.refresh()
+                    }, 1200)
+                    return false;
+                }
+
+                let url = '?page=check&code=' + code
+                fetch(url).then(response => response.json()).then(({ code: status, msg }) => {
+                    captcha.showTips(msg, status == 1, () => {
+                        if (status == 1) {
+                            captcha.close()
+                        } else {
+                            captcha.refresh()
+                        }
+                    })
+                })
+
+
+                return false;
+            }
+        })
+    </script>
+</body>
+
+</html>
