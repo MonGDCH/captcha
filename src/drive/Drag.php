@@ -25,7 +25,10 @@ class Drag implements CaptchaDrive
         // 背景素材
         'imgs'          => [
             __DIR__ . '/../drag/imgs/1.jpeg',
-            __DIR__ . '/../drag/imgs/2.jpeg'
+            __DIR__ . '/../drag/imgs/2.jpeg',
+            __DIR__ . '/../drag/imgs/3.jpeg',
+            __DIR__ . '/../drag/imgs/4.jpeg',
+            __DIR__ . '/../drag/imgs/5.jpeg',
         ],
         // 生成验证码图片宽度
         'bg_width'      => 300,
