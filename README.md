@@ -1,8 +1,9 @@
 # mon-captcha
 php验证码库
 
-支持数字、英文字符、数字计算、中文等多种图片验证码类型
-支持自定义验证码存储，不依赖 session
+- 支持图像拖拽、数字、英文字符、数学计算、中文等多种图片验证码类型
+- 支持自定义验证码存储驱动
+- 支持自定义扩展验证码类型
 
 #### 安装
 
@@ -10,12 +11,13 @@ php验证码库
 composer require mongdch/mon-captcha
 ```
 
-#### API文档
-
-[请查看Wiki](https://github.com/MonGDCH/mon-captcha/wiki) 
-
 
 #### 版本
+
+##### 1.3.0
+
+* 全新版本，重构所有代码，使用方式请查看`example`目录
+
 
 ##### 1.2.3
 

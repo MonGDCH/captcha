@@ -32,8 +32,6 @@ class Captcha
         'store'     => Session::class,
         // 验证码过期时间（s）
         'expire'    => 180,
-        // 是否区分大小写
-        'case'      => false,
         // 验证成功后是否重置验证码
         'reset'     => true,
     ];

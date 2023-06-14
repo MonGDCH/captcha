@@ -119,7 +119,7 @@ class Image implements CaptchaDrive
      * @param integer $length  验证码长度，非运算型验证码有效
      * @return CaptchaInfo
      */
-    public function create(array $typeArr = ['scalar'], int $length = 4): CaptchaInfo
+    public function create(array $typeArr = ['num', 'en', 'calcul', 'scalar'], int $length = 4): CaptchaInfo
     {
         // 随机获取验证码类型
         $typeKey = array_rand($typeArr, 1);
