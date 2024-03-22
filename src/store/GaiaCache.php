@@ -71,6 +71,6 @@ class GaiaCache implements CaptchaStore
         if (empty($id)) {
             throw new InvalidArgumentException('Captcha id can not be empty');
         }
-        return 'captcha::' . $app . '::' . $id;
+        return 'captcha:' . $app . ':' . $id;
     }
 }
