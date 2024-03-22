@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mon\captcha;
 
 use mon\captcha\drive\Image;
@@ -78,6 +80,16 @@ class Captcha
     }
 
     /**
+     * 获取配置信息
+     *
+     * @return array
+     */
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    /**
      * 获取验证码存储驱动
      *
      * @return CaptchaStore
@@ -98,7 +110,7 @@ class Captcha
     }
 
     /**
-     * 获取驱动
+     * 获取验证码生成驱动
      *
      * @return CaptchaDrive
      */

@@ -35,6 +35,7 @@ class Install
      */
     public static function install()
     {
+        echo 'mon-captcha installation successful, please execute `php gaia vendor:publish mon\captcha`' . PHP_EOL;
     }
 
     /**
@@ -44,6 +45,7 @@ class Install
      */
     public static function update()
     {
+        echo 'mon-captcha upgrade successful, please execute `php gaia vendor:publish mon\captcha`' . PHP_EOL;
     }
 
     /**

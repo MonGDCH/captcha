@@ -61,13 +61,14 @@ final class CaptchaInfo
     /**
      * 获取图片base64
      *
+     * @param boolean $trim 是否去空格
      * @return string
      */
-    public function getBase64(): string
+    public function getBase64(bool $trim = false): string
     {
         $content = chunk_split(base64_encode($this->getImg()));
         $base64 = 'data:image/png;base64,' . $content;
-        return $base64;
+        return $trim ? trim($base64) : $base64;
     }
 
     /**
