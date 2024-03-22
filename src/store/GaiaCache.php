@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace mon\captcha\store;
 
-use mon\http\Session;
+use InvalidArgumentException;
 use mon\captcha\CaptchaStore;
+use support\cache\CacheService;
+use support\captcha\CaptchaService;
 
 /**
- * Gaia框架Session存储驱动
+ * Gaia框架缓存存储驱动
  * 
  * @author Mon <985558837@qq.com>
  * @version 1.0.0
  */
-class GaiaSession implements CaptchaStore
+class GaiaCache implements CaptchaStore
 {
     /**
      * 获取存储数据
@@ -26,7 +28,7 @@ class GaiaSession implements CaptchaStore
     public function get(string $app, string $id, $default = null)
     {
         $key = $this->encode($app, $id);
-        return Session::instance()->get($key, $default);
+        return CacheService::instance()->get($key, $default);
     }
 
     /**
@@ -40,7 +42,8 @@ class GaiaSession implements CaptchaStore
     public function set(string $app, string $id, $value)
     {
         $key = $this->encode($app, $id);
-        return Session::instance()->set($key, $value);
+        $expire = CaptchaService::instance()->getConfig('expire', 60);
+        return CacheService::instance()->set($key, $value, intval($expire));
     }
 
     /**
@@ -53,17 +56,21 @@ class GaiaSession implements CaptchaStore
     public function delete(string $app, string $id)
     {
         $key = $this->encode($app, $id);
-        return Session::instance()->delete($key);
+        return CacheService::instance()->delete($key);
     }
 
     /**
-     * 加密验证码
+     * 获取验证码key名
      *
-     * @param string $str 验证码信息
+     * @param string $app   所属应用
+     * @param string $id    验证码ID，不能为空
      * @return string
      */
     protected function encode(string $app, string $id): string
     {
-        return md5($app . $id);
+        if (empty($id)) {
+            throw new InvalidArgumentException('Captcha id can not be empty');
+        }
+        return 'captcha::' . $app . '::' . $id;
     }
 }

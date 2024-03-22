@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace support\captcha;
 
+use mon\env\Config;
 use mon\util\Instance;
 use mon\captcha\Captcha;
-use mon\captcha\drive\Image;
-use mon\captcha\store\GaiaSession;
 
 /**
  * 验证码服务
  * 
+ * @method \mon\captcha\CaptchaStore getStore()   获取验证码存储驱动
+ * @method \mon\captcha\CaptchaDrive getDrive()   获取验证码生成驱动
  * @method \mon\captcha\CaptchaInfo create(string $app, string $id = '', ...$params)  创建验证码
  * @method boolean check(string $code, string $app, string $id = '', ...$params)  校验验证码
- * @method string getScript()   获取相关脚本文件
+ * @method mixed getConfig(string $key = null, $default = null)    获取配置信息
  * 
  * @author Mon <985558837@qq.com>
  * @version 1.0.0
@@ -39,14 +40,14 @@ class CaptchaService
         // 验证器驱动
         'drive'     => [
             // 驱动对象名，实现 CaptchaDrive 接口
-            'class'     => Image::class,
+            'class'     => \mon\captcha\drive\Image::class,
             // 驱动配置信息
             'config'    => [],
         ],
         // 存储驱动实例，实现 CaptchaStore 接口
-        'store'     => GaiaSession::class,
+        'store'     => \mon\captcha\store\GaiaSession::class,
         // 验证码过期时间（s）
-        'expire'    => 180,
+        'expire'    => 60,
         // 验证成功后是否重置验证码
         'reset'     => true,
     ];
@@ -56,6 +57,7 @@ class CaptchaService
      */
     protected function __construct()
     {
+        $this->config = array_merge($this->config, Config::instance()->get('captcha', []));
         $this->service = new Captcha($this->config);
     }
 
@@ -73,7 +75,7 @@ class CaptchaService
      * 回调服务
      *
      * @param string $name      方法名
-     * @param mixed $arguments 参数列表
+     * @param mixed $arguments  参数列表
      * @return mixed
      */
     public function __call($name, $arguments)

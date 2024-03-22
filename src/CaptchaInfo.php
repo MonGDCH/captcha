@@ -17,7 +17,7 @@ final class CaptchaInfo
      *
      * @var string
      */
-    private $img = '';
+    private $img;
 
     /**
      * 验证码数据

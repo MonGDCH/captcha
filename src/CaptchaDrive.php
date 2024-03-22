@@ -37,8 +37,8 @@ interface CaptchaDrive
     /**
      * 校验验证码
      *
-     * @param string $code   用户输入验证码
-     * @param string $checkCode  创建的验证码
+     * @param string $code      用户输入验证码
+     * @param string $checkCode 创建的验证码
      * @return boolean
      */
     public function check(string $code, string $checkCode): bool;

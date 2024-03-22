@@ -15,8 +15,8 @@ interface CaptchaStore
     /**
      * 获取存储数据
      *
-     * @param string $app 验证码所属应用
-     * @param string $id 验证码ID
+     * @param string $app    验证码所属应用
+     * @param string $id     验证码ID
      * @param mixed $default 默认值
      * @return mixed
      */
@@ -25,9 +25,9 @@ interface CaptchaStore
     /**
      * 设置存储数据
      *
-     * @param string $app 验证码所属应用
-     * @param string $id 验证码ID
-     * @param mixed $value 值
+     * @param string $app   验证码所属应用
+     * @param string $id    验证码ID
+     * @param mixed $value  值
      * @return mixed
      */
     public function set(string $app, string $id, $value);
@@ -35,8 +35,8 @@ interface CaptchaStore
     /**
      * 删除存储数据
      *
-     * @param string $app 验证码所属应用
-     * @param string $id 验证码ID
+     * @param string $app   验证码所属应用
+     * @param string $id    验证码ID
      * @return mixed
      */
     public function delete(string $app, string $id);

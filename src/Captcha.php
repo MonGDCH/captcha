@@ -82,11 +82,16 @@ class Captcha
     /**
      * 获取配置信息
      *
-     * @return array
+     * @param string|null $key  配置项
+     * @param mixed $default 默认值
+     * @return mixed
      */
-    public function getConfig(): array
+    public function getConfig(string $key = null, $default = null)
     {
-        return $this->config;
+        if (is_null($key)) {
+            return $this->config;
+        }
+        return $this->config[$key] ?? $default;
     }
 
     /**
@@ -129,10 +134,10 @@ class Captcha
     /**
      * 创建验证码
      *
-     * @param string $app 验证码所属应用
-     * @param string $id 验证码ID
+     * @param string $app       验证码所属应用
+     * @param string $id        验证码ID
      * @param mixed ...$params  生成验证码参数
-     * @return CaptchaInfo  验证码信息对象
+     * @return CaptchaInfo      验证码信息对象
      */
     public function create(string $app, string $id = '', ...$params): CaptchaInfo
     {
@@ -148,7 +153,7 @@ class Captcha
      * 验证验证码
      *
      * @param string $code  验证码
-     * @param string $app 验证码所属应用
+     * @param string $app   验证码所属应用
      * @param string $id    验证码ID
      * @param mixed $params 额外参数
      * @return boolean
@@ -183,8 +188,8 @@ class Captcha
      * 保存验证码
      *
      * @param string $code  验证码值
-     * @param string $app 验证码所属应用
-     * @param string $id 验证码ID
+     * @param string $app   验证码所属应用
+     * @param string $id    验证码ID
      * @return Captcha
      */
     public function setCode(string $code, string $app, string $id = ''): Captcha
@@ -202,9 +207,9 @@ class Captcha
     /**
      * 获取验证码
      *
-     * @param string $app 验证码所属应用
-     * @param string $id 验证码ID
-     * @param mixed $default 默认值
+     * @param string $app       验证码所属应用
+     * @param string $id        验证码ID
+     * @param mixed  $default   默认值
      * @return mixed
      */
     public function getCode(string $app, string $id = '', $default = null)
@@ -215,8 +220,8 @@ class Captcha
     /**
      * 删除验证码
      *
-     * @param string $app 验证码所属应用
-     * @param string $id 验证码ID
+     * @param string $app   验证码所属应用
+     * @param string $id    验证码ID
      * @return mixed
      */
     public function deleteCode(string $app, string $id = '')
