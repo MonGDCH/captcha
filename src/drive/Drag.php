@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace mon\captcha\drive;
 
-use mon\captcha\CaptchaDrive;
-use mon\captcha\CaptchaInfo;
 use RuntimeException;
+use mon\captcha\CaptchaInfo;
+use mon\captcha\CaptchaDrive;
 
 /**
  * 拖拽验证码驱动
@@ -22,6 +22,8 @@ class Drag implements CaptchaDrive
      * @var array
      */
     protected $config = [
+        // JavaScript脚本
+        'script'        => __DIR__ . '/../drag/js/monCaptcha.js',
         // 背景素材
         'imgs'          => [
             __DIR__ . '/../drag/imgs/1.jpeg',
@@ -151,6 +153,19 @@ class Drag implements CaptchaDrive
             return false;
         }
         return abs($checkCode - $code) <= $fault;
+    }
+
+    /**
+     * 获取相关脚本
+     *
+     * @return string
+     */
+    public function getScript(): string
+    {
+        if (empty($this->config['script']) || !file_exists($this->config['script'])) {
+            return '';
+        }
+        return file_get_contents($this->config['script']) ?: '';
     }
 
     /**

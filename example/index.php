@@ -23,7 +23,7 @@ $captcha = new Captcha([
     // ]
 ]);
 // 生成验证码图片
-$img = $captcha->create($app, $id, ['num', 'en', 'calcul', 'scalar'], 4);
+$img = $captcha->create($app, $id, ['scalar', 'calcul'], 4);
 $img->output();
 // var_dump($img);
 

@@ -44,6 +44,9 @@ class App
                 header('Content-Type: application/json');
                 echo $msg;
                 break;
+            case 'js':
+                echo $sdk->getDrive()->getScript();
+                break;
             default:
                 include_once __DIR__ . '/drag.html';
                 break;

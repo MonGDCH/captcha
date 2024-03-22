@@ -9,8 +9,6 @@ use mon\captcha\store\Session;
  * 验证码
  * 
  * @author Mon <985558837@qq.com>
- * @version 1.1.0
- * @version 1.1.1 定制化LAF框架支持
  * @version 1.2.0 优化定制支持实现，支持任意框架
  */
 class Captcha

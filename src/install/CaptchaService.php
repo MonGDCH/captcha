@@ -14,6 +14,7 @@ use mon\captcha\store\GaiaSession;
  * 
  * @method \mon\captcha\CaptchaInfo create(string $app, string $id = '', ...$params)  创建验证码
  * @method boolean check(string $code, string $app, string $id = '', ...$params)  校验验证码
+ * @method string getScript()   获取相关脚本文件
  * 
  * @author Mon <985558837@qq.com>
  * @version 1.0.0

@@ -42,4 +42,11 @@ interface CaptchaDrive
      * @return boolean
      */
     public function check(string $code, string $checkCode): bool;
+
+    /**
+     * 获取相关脚本
+     *
+     * @return string
+     */
+    public function getScript(): string;
 }
