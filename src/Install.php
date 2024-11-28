@@ -26,6 +26,7 @@ class Install
      */
     protected static $file_relation = [
         'install/CaptchaService.php' => 'support/captcha/CaptchaService.php',
+        'install/config.php' => 'config/captcha.php',
     ];
 
     /**
@@ -53,9 +54,7 @@ class Install
      *
      * @return void
      */
-    public static function uninstall()
-    {
-    }
+    public static function uninstall() {}
 
     /**
      * Gaia发布

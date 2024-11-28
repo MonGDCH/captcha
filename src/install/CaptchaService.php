@@ -80,7 +80,6 @@ class CaptchaService
      */
     public function __call($name, $arguments)
     {
-        $d = call_user_func_array([$this->getService(), $name], (array) $arguments);
-        return $d;
+        return call_user_func_array([$this->getService(), $name], (array) $arguments);
     }
 }
